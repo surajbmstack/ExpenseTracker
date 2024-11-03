@@ -1,24 +1,31 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const authRoutes = require("./routes/authRoutes");
-const expenseRoutes = require("./routes/expenseRoutes");
-
-dotenv.config();
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const expensesRoute = require('./routes/expenses');
+const authRoute = require('./routes/auth');
+const bodyParser = require('body-parser');
 const app = express();
-app.use(express.json());
-app.use(cors({
-    origin: "http://localhost:3000", 
-}));
-
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => console.log("MongoDB connected"));
-
-app.use("/api/auth", authRoutes);
-app.use("/api/expenses", expenseRoutes);
-
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const corsOptions = {
+    origin: 'http://localhost:3000', // Allow requests from this origin
+    // For legacy browser support
+};
+
+// Use CORS with options
+app.use(cors(corsOptions));
+app.use(express.json());
+
+app.use(bodyParser.json())
+app.use('/api/expenses', expensesRoute);
+app.use('/api/auth', authRoute);
+
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("MongoDB connected"))
+    .catch((err) => console.log("MongoDB connection error:", err));
+
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});

@@ -1,26 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Navbar = ({ user, setUser }) => {
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        setUser(null);
-    };
-
+const Navbar = ({ token, setToken }) => {
+  
+const handleLogout=()=>{
+    setToken(null);
+    localStorage.clear(token)
+}
     return (
-        <nav>
-           
-            {user ? (
-                <>   <Link to="/">Home</Link>
-                    <span>Welcome, {user.username}</span>
-                    <button onClick={handleLogout}>Logout</button>
-                   
+        <nav className="navbar">
+            <Link to="/">Home</Link>
+            {!token ? (
+                <>
+                    <Link to="/login">Login</Link>
+                    <Link to="/register">Register</Link>
                 </>
             ) : (
-                <><Link to="/login">Login</Link>
-                <Link to="/signup">Signup</Link>
+                <>
+                    <Link to="/expenses">Expenses</Link>
+                    <button onClick={handleLogout}>Logout</button>
                 </>
-                
             )}
         </nav>
     );

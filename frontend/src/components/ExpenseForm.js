@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const ExpenseForm = ({ fetchExpenses }) => {
+const ExpenseForm = ({ fetchExpenses}) => {
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         await axios.post("http://localhost:5000/api/expenses/add", { description, amount }, {
-            headers: { Authorization: localStorage.getItem("token") },
+            headers: { Authorization: localStorage.getItem("token")},
         });
         fetchExpenses();
         setDescription("");
@@ -16,7 +16,7 @@ const ExpenseForm = ({ fetchExpenses }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="expense-form">
             <input
                 type="text"
                 placeholder="Description"
